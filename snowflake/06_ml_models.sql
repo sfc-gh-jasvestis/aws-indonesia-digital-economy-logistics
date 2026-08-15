@@ -1,0 +1,18 @@
+-- ============================================================================
+-- 06_ML_MODELS.SQL — ML Functions for Last-Mile Logistics Optimization
+-- ============================================================================
+USE DATABASE LOGISTICS_OPTIMIZATION;
+USE SCHEMA ML;
+
+-- ML.FORECAST: VOLUME_FORECAST
+CREATE OR REPLACE SNOWFLAKE.ML.FORECAST ML.VOLUME_FORECAST(
+  INPUT_DATA => SYSTEM$REFERENCE('TABLE', 'CURATED.HUB_CAPACITY'),
+  SERIES_COLNAME => 'HUB_ID',
+  TIMESTAMP_COLNAME => 'DS',
+  TARGET_COLNAME => 'Y'
+  
+);
+
+CREATE OR REPLACE TABLE ML.VOLUME_FORECAST_RESULTS AS
+SELECT * FROM TABLE(ML.VOLUME_FORECAST!FORECAST(FORECASTING_PERIODS => 14));
+
