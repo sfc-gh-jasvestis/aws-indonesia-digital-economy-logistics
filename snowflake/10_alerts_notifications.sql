@@ -8,7 +8,7 @@ USE SCHEMA APP;
 CREATE OR REPLACE NOTIFICATION INTEGRATION aws_indonesia_digital_economy_logistics_EMAIL_INT
   TYPE = EMAIL
   ENABLED = TRUE
-  ALLOWED_RECIPIENTS = ('jonathan.asvestis@snowflake.com');
+  ALLOWED_RECIPIENTS = ('<YOUR_EMAIL>');
 
 -- Alert: SLA_BREACH_ALERT
 CREATE OR REPLACE ALERT APP.SLA_BREACH_ALERT
@@ -22,7 +22,7 @@ IF (EXISTS (
 THEN
   CALL SYSTEM$SEND_EMAIL(
     'aws_indonesia_digital_economy_logistics_EMAIL_INT',
-    'jonathan.asvestis@snowflake.com',
+    '<YOUR_EMAIL>',
     '[ALERT] Last-Mile Logistics Optimization: Delivery SLA breach at hub — investigate capacity and routing',
     'Delivery SLA breach at hub — investigate capacity and routing'
   );
@@ -41,7 +41,7 @@ IF (EXISTS (
 THEN
   CALL SYSTEM$SEND_EMAIL(
     'aws_indonesia_digital_economy_logistics_EMAIL_INT',
-    'jonathan.asvestis@snowflake.com',
+    '<YOUR_EMAIL>',
     '[ALERT] Last-Mile Logistics Optimization: Hub approaching overflow — volume rerouting needed',
     'Hub approaching overflow — volume rerouting needed'
   );
