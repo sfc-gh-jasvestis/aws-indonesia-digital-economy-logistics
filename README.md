@@ -120,7 +120,7 @@ Industry research and Snowflake customer outcomes:
 - **Indonesian e-commerce logistics market valued at US$8.5B in 2023 with 25% CAGR** — [Ken Research](https://www.kenresearch.com/)
 - **AI-optimized routing reduces last-mile delivery costs by 15-25%** — [McKinsey Last-Mile](https://www.mckinsey.com/industries/travel-logistics-and-infrastructure/our-insights)
 - **On-time delivery improvement from 91% to 95% reduces customer churn by 20%** — [Bain & Company](https://www.bain.com/)
-
+- **DoorDash** (Snowflake customer): processes 25M+ daily orders on Snowflake with ML-powered delivery optimization and marketplace analytics -- [snowflake.com/customers/doordash](https://www.snowflake.com/en/customers/all-customers/case-study/doordash/)
 
 ## Key Demo Numbers
 
