@@ -1,106 +1,79 @@
-# Demo Script: Last-Mile Logistics Optimization
-## ~4-Minute Recorded Walkthrough
-**Format**: Screen recording with voiceover
-**Target**: Customer meeting / booth loop / social share
-**Narrative**: "Snowflake optimizes last-mile delivery across 17,000 islands — Dynamic Tables maintain real-time fleet visibility, ML.FORECAST projects volume by hub, and Cortex AI generates route optimization recommendations for Indonesia's unique archipelago geography"
-**Demo Mode**: Open app with `?demo=true` for presenter notes
+# Last-Mile Logistics Optimization
 
----
+**Indonesia - Digital Economy & E-Commerce**
+Use case: Last-Mile Logistics
 
-## Two Personas
+> Route optimization and delivery intelligence for Indonesia's archipelago logistics challenge — ML.FORECAST predicts delivery volumes, Dynamic Tables build real-time fleet dashboards, and Cortex AI generates route recommendations.
 
-| Persona | Role | Tool | What they care about |
-|---|---|---|---|
-| **Rudi Hartanto** | VP Logistics Operations | React App (SPCS) | On-time delivery rate, cost per parcel, fleet utilization, inter-island logistics costs |
-| **Devi Anggraeni** | Network Planning Analyst | Amazon QuickSight | Hub capacity planning, route efficiency, driver productivity, seasonal surge preparation |
+## Why Snowflake
 
----
+Snowflake optimizes last-mile delivery across 17,000 islands — Dynamic Tables maintain real-time fleet visibility, ML.FORECAST projects volume by hub, and Cortex AI generates route optimization recommendations for Indonesia's unique archipelago geography
 
-## What's Built
+- **ML.FORECAST for hub volume prediction** - Only demo using ML.FORECAST for last-mile delivery volume forecasting at archipelago scale
+- **AI route optimization recommendations** - Cortex AI generates consolidation and rebalancing plans across 50,000 routes
+- **Inter-island logistics cost analysis** - Unique to Indonesian archipelago — 3.2x cost premium for inter-island delivery
+- **Indonesian e-logistics context** - 17,000 islands, 500 hubs, Harbolnas surge planning, motorcycle last-mile
 
-| Layer | Component | Detail |
+## What is deployed
+
+| | |
+|---|---|
+| Database | `ID_DIGITAL_ECONOMY_LOGISTICS` |
+| Service | `ID_DIGITAL_ECONOMY_LOGISTICS_APP` |
+| Compute pool | `SEA_DEMOS_INDONESIA_POOL` |
+| Dimension table | `RAW.LOGISTICS_DOCS` (20 rows) |
+| Fact table | `RAW.DELIVERIES` (250,000 rows, 90 days) |
+| Curated layer | `CURATED.PERFORMANCE_SUMMARY`, `CURATED.TREND_ANALYSIS`, `CURATED.KPI_SUMMARY` |
+| Currency | IDR (Rp) |
+
+Regions in play: Jakarta, North Sumatra, Riau, East Kalimantan, Sulawesi
+Segments: Instant, Same Day, Next Day, Regular Cargo
+
+Dynamic tables are created suspended and refreshed on demand:
+
+```bash
+./refresh_demo_data.sh ID_DIGITAL_ECONOMY_LOGISTICS
+```
+
+## KPI cards
+
+Every card below is served live from `CURATED.KPI_SUMMARY`. The app keeps the
+original literal as a fallback, so it still renders if Snowflake is unreachable.
+
+| Card | Value | Backed by |
 |---|---|---|
-| **RAW** | 6 tables | DELIVERIES (30000000), HUBS (500), FLEET (15000), ROUTES (50000), DRIVER_PERFORMANCE (200000), LOGISTICS_DOCS (80) |
-| **CURATED** | 4 Dynamic Tables | DELIVERY_PERFORMANCE, HUB_CAPACITY, ROUTE_EFFICIENCY, DRIVER_PRODUCTIVITY |
-| **ML** | ML.FORECAST | Forecasting + anomaly detection |
-| **AI** | COMPLETE, AI_CLASSIFY, SUMMARIZE | Classification + extraction |
-| **Search** | Cortex Search | 80 documents indexed |
-| **Agent** | LOGISTICS_INTELLIGENCE_AGENT | Semantic View + Search tools |
+| Deliveries (MTD) | `14.2M` | total across Logistics Docs |
+| On-Time Rate | `93.4%` | average per event |
+| Avg Delivery Time | `2.1 days` | average per event |
+| Active Riders | `184K` | total across Logistics Docs |
+| Fuel Cost Saved | `Rp 2.4B` | total across Logistics Docs |
+| Route Efficiency | `+12%` | average per event |
+| Failed Deliveries | `3.2%` | total across Logistics Docs |
 
 
----
+## Demo flow
 
-## The Story
+1. Operations Overview
+2. Route Analytics
+3. Demand Planning
+4. Ask AI
+5. Architecture & Data
 
-Indonesia's 17,000-island archipelago creates the world's most complex last-mile logistics challenge. With 30 million monthly deliveries, on-time rates below target, and Harbolnas (12.12) projected to spike volumes 60%, the VP Logistics needs real-time fleet visibility and ML-powered demand planning — not reactive spreadsheet management after SLA breaches.
+## Talking points
 
----
+- **30M deliveries/month** - across 500 hubs and 17,000 islands
+- **91.3% OTD** - on-time delivery rate (target: 95%)
+- **Rp 8,200** - average cost per parcel
+- **15,000 vehicles** - motorcycles, vans, and trucks in fleet
+- **50,000 routes** - analyzed for optimization opportunities
 
-## Script
+## Business impact
 
-### [0:00–0:45] OPERATIONS OVERVIEW
-
-**Show**: Operations Overview tab
-
-> "30 million deliveries per month across 500 hubs and 17,000 islands."
-
-**Action**: Point at 30M deliveries and 91.3% OTD rate
-
-### [0:45–1:30] ROUTE ANALYTICS
-
-**Show**: Route Analytics tab
-
-> "50,000 routes analyzed — inter-island routes 3.2x more expensive per parcel."
-
-**Action**: Show cost per parcel by region map
-
-### [1:30–2:15] DEMAND PLANNING
-
-**Show**: Demand Planning tab
-
-> "ML.FORECAST projects 48M deliveries during Harbolnas week — 60% above baseline."
-
-**Action**: Show volume forecast chart with Harbolnas spike
-
-### [2:15–3:00] ASK AI
-
-**Show**: Ask AI tab
-
-> "Rudi asks: 'What's our on-time delivery rate this week?'"
-
-**Action**: Type delivery rate question
-
-### [3:00–3:45] ARCHITECTURE & DATA
-
-**Show**: Architecture & Data tab
-
-> "Six Snowflake capabilities, six AWS services."
-
-**Action**: Walk through architecture diagram
-
+- Indonesia logistics costs represent 23% of GDP — highest in ASEAN (World Bank Logistics)
+- Indonesian e-commerce logistics market valued at US$8.5B in 2023 with 25% CAGR (Ken Research)
+- AI-optimized routing reduces last-mile delivery costs by 15-25% (McKinsey Last-Mile)
+- On-time delivery improvement from 91% to 95% reduces customer churn by 20% (Bain & Company)
 
 ---
-
-## Key Demo Differentiators
-
-1. **ML.FORECAST for hub volume prediction** — Only demo using ML.FORECAST for last-mile delivery volume forecasting at archipelago scale
-2. **AI route optimization recommendations** — Cortex AI generates consolidation and rebalancing plans across 50,000 routes
-3. **Inter-island logistics cost analysis** — Unique to Indonesian archipelago — 3.2x cost premium for inter-island delivery
-4. **Indonesian e-logistics context** — 17,000 islands, 500 hubs, Harbolnas surge planning, motorcycle last-mile
-
-
----
-
-## Demo Prep Checklist
-
-### Data Verification
-- [ ] `SELECT COUNT(*) FROM LOGISTICS_OPTIMIZATION.RAW.DELIVERIES` → 30000000
-- [ ] `SELECT COUNT(*) FROM LOGISTICS_OPTIMIZATION.RAW.HUBS` → 500
-- [ ] `SELECT COUNT(*) FROM LOGISTICS_OPTIMIZATION.RAW.FLEET` → 15000
-
-### ML Model Verification
-- [ ] `SELECT COUNT(*) FROM LOGISTICS_OPTIMIZATION.ML.VOLUME_FORECAST_RESULTS` → >0
-
-### AI/Agent Verification
-- [ ] `SELECT COUNT(*) FROM LOGISTICS_OPTIMIZATION.AI.DELIVERY_FAILURE_CLASSIFICATION` → >0
-
+Generated from `generator/demo_specs/aws-indonesia-digital-economy-logistics.json`. Do not hand-edit: run
+`python3 generator/gen_repo_docs.py aws-indonesia-digital-economy-logistics` instead.
