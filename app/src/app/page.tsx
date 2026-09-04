@@ -54,6 +54,7 @@ export default function HomePage() {
         <div className="lg:col-span-1">
           <GeoMap
             country="indonesia"
+            labels={{ entity: 'Hubs', event: 'Deliveries', alert: 'Failed Drops' }}
             regions={data?.regions}
             markers={[{"label": "Jakarta", "value": "HQ: ops center", "color": "blue", "size": "lg"}, {"label": "Surabaya", "value": "Hub: high volume", "color": "green", "size": "md"}, {"label": "Bandung", "value": "Fulfillment center", "color": "green", "size": "md"}, {"label": "Semarang", "value": "Distribution hub", "color": "green", "size": "sm"}]}
             routes={[{"from": "Jakarta", "to": "Surabaya", "color": "#29B5E8"}, {"from": "Jakarta", "to": "Bandung", "color": "#10B981"}]}
@@ -84,8 +85,13 @@ export default function HomePage() {
         columns={[
           { key: 'id', header: '#' },
           { key: 'name', header: 'Hub' },
+          { key: 'region', header: 'Region' },
           { key: 'status', header: 'Status' },
-          { key: 'value', header: 'Throughput/Day' },
+          { key: 'm1', header: 'Throughput/Day' },
+          { key: 'm2', header: 'Delivery Time' },
+          { key: 'm3', header: 'Route Efficiency' },
+          { key: 'events', header: 'Deliveries' },
+          { key: 'alerts', header: 'Failed Drops' },
         ]}
         data={data?.entities || []}
         title="Hub Performance"
