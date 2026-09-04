@@ -54,6 +54,7 @@ export default function HomePage() {
         <div className="lg:col-span-1">
           <GeoMap
             country="indonesia"
+            regions={data?.regions}
             markers={[{"label": "Jakarta", "value": "HQ: ops center", "color": "blue", "size": "lg"}, {"label": "Surabaya", "value": "Hub: high volume", "color": "green", "size": "md"}, {"label": "Bandung", "value": "Fulfillment center", "color": "green", "size": "md"}, {"label": "Semarang", "value": "Distribution hub", "color": "green", "size": "sm"}]}
             routes={[{"from": "Jakarta", "to": "Surabaya", "color": "#29B5E8"}, {"from": "Jakarta", "to": "Bandung", "color": "#10B981"}]}
             title="Geographic Overview"
