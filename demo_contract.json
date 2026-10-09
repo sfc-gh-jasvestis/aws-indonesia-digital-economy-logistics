@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "repo": "aws-indonesia-digital-economy-logistics",
+  "operation": "on-demand",
+  "data_classification": "synthetic demonstration only",
+  "currency": "IDR",
+  "grains": {
+    "RAW.HUBS": "one row per parcel hub",
+    "RAW.HUB_DAILY": "one row per hub per day (90 days)",
+    "RAW.FLEET_READINESS": "one row per hub (delivery vehicle snapshot)",
+    "CURATED.PERFORMANCE_SUMMARY": "one row per hub",
+    "CURATED.TREND_ANALYSIS": "one row per day",
+    "CURATED.DISRUPTION_CAUSES": "one row per root cause",
+    "CURATED.KPI_SUMMARY": "one row per KPI",
+    "ML.DISRUPTION_RISK_SCORES": "one row per hub (latest day)"
+  },
+  "metrics": {
+    "On-Time Delivery": "100 * SUM(ON_TIME_PARCELS) / SUM(PARCELS)",
+    "Delivery Disruptions": "SUM(DISRUPTION_COUNT)",
+    "Failed Attempts per 1k": "1000 * SUM(FAILED_ATTEMPTS) / SUM(PARCELS)",
+    "Parcels Handled": "SUM(PARCELS)",
+    "Sorter Uptime": "100 * SUM(OPERATING_HOURS) / SUM(PLANNED_HOURS)",
+    "Hubs Monitored": "COUNT(RAW.HUBS)",
+    "Fleet Readiness": "100 * SUM(LEAST(ON_HAND_QTY, REQUIRED_QTY)) / SUM(REQUIRED_QTY)"
+  },
+  "chart_bindings": {
+    "daily_on_time": [
+      "CURATED.TREND_ANALYSIS.METRIC_DATE",
+      "ON_TIME_PCT"
+    ],
+    "late_parcels_by_cause": [
+      "CURATED.DISRUPTION_CAUSES.ROOT_CAUSE",
+      "LATE_PARCELS"
+    ],
+    "pm_vs_on_time": [
+      "CURATED.PERFORMANCE_SUMMARY.PM_COMPLIANCE_PCT",
+      "ON_TIME_PCT"
+    ],
+    "quicksight_disruption_risk": [
+      "ENTITY_ID",
+      "MAX(DISRUPTION_PROB_7D)"
+    ]
+  },
+  "freshness": "MAX(EVENT_DATE) is an observation watermark; requestedAt is not freshness",
+  "required_capabilities": {
+    "core_pipeline": "Curated KPIs reconcile to a RAW recomputation (run_core.py checks this on every build)",
+    "disruption_risk_model": "Snowflake ML CLASSIFICATION of P(disruption in next 7 days) per hub, evaluated on an out-of-time holdout",
+    "forecast_and_anomaly": "14-day network-wide parcel-volume FORECAST; parcel dwell-time ANOMALY_DETECTION (train 75 days, detect last 15)",
+    "search": "Cortex Search SEARCH.HUB_SOP_SEARCH over synthetic disruption-response SOPs (one per hub type and cause)",
+    "semantic_analytics": "Semantic view APP.LOGISTICS_ANALYTICS and Cortex Agent APP.LOGISTICS_AGENT using analyst + search tools",
+    "grounded_ai": "Agent answers return generated SQL and SOP citations; the action memo uses only KPI, disruption, cause and risk rows",
+    "quicksight": "DIRECT_QUERY dashboard (KPIs, daily on-time delivery, disruptions by hub, disruption risk, IoT message count) through a read-only Snowflake service user",
+    "quicksight_q": "Amazon Q topic over the curated datasets for natural-language questions",
+    "aws_ingestion": "IoT Core rule -> S3 -> Snowpipe AUTO_INGEST into RAW.LIVE_TELEMETRY",
+    "notifications": "APP.LIVE_ALARM_ALERT logs new ALARM readings to APP.ALERT_LOG and emails via SYSTEM$SEND_EMAIL; alert and tasks suspended between demos",
+    "orchestration": "Task graph APP.TASK_REFRESH_CURATED -> APP.TASK_RESCORE_RISK run on demand (EXECUTE TASK)",
+    "app_deployment": "SPCS service APP.ID_LOGISTICS_APP; routes /api/data, /api/ask, /api/agent"
+  },
+  "builds": {
+    "snowflake": {
+      "database": "INDONESIA_LOGISTICS_SNOWFLAKE",
+      "app_setting": "DEMO_PLATFORM=snowflake",
+      "live_telemetry": "APP.SIMULATE_TELEMETRY(n)",
+      "memo": "Cortex AI_COMPLETE (claude-sonnet-4-5)"
+    },
+    "aws": {
+      "database": "INDONESIA_LOGISTICS_AWS",
+      "app_setting": "DEMO_PLATFORM=aws",
+      "live_telemetry": "AWS IoT Core -> S3 -> Snowpipe",
+      "memo": "Amazon Bedrock Claude Sonnet 4.5 via APP.BEDROCK_GENERATE",
+      "capabilities": "see required_capabilities"
+    }
+  }
+}
